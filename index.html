@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>AI Online Doctor Consultation</title>
+<title>MediCare - Online Doctor Consultation</title>
 <style>
   * {
     margin: 0;
@@ -32,6 +32,105 @@
     z-index: -1;
   }
   
+  /* Header Styles */
+  .header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 15px;
+    margin-bottom: 30px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .header-container::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background: linear-gradient(90deg, #005288, #0088cc);
+  }
+  
+  .logo-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+  
+  .hospital-logo {
+    width: 70px;
+    height: 70px;
+    background: linear-gradient(135deg, #005288, #0088cc);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 28px;
+    font-weight: bold;
+    box-shadow: 0 6px 12px rgba(0, 82, 136, 0.3);
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+  }
+  
+  .hospital-logo::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent, rgba(255,255,255,0.2), transparent);
+    transform: rotate(45deg);
+    transition: transform 0.5s ease;
+  }
+  
+  .hospital-logo:hover::before {
+    transform: rotate(45deg) translate(20%, 20%);
+  }
+  
+  .hospital-logo:hover {
+    transform: scale(1.1);
+  }
+  
+  .hospital-name {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .hospital-name h1 {
+    color: #005288;
+    font-size: 1.8rem;
+    margin-bottom: 5px;
+  }
+  
+  .hospital-name p {
+    color: #0088cc;
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+  
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  
+  .time-display {
+    font-size: 1rem;
+    color: #005288;
+    font-weight: bold;
+    background: rgba(0, 82, 136, 0.1);
+    padding: 8px 15px;
+    border-radius: 20px;
+  }
+  
   /* Menu Styles */
   .menu {
     display: flex;
@@ -43,7 +142,6 @@
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     position: relative;
     overflow: hidden;
-    animation: fadeIn 0.8s ease-out;
   }
   
   .menu::before {
@@ -64,59 +162,56 @@
     font-weight: 600;
     border-radius: 8px;
     transition: all 0.3s ease;
-    animation: slideInUp 0.5s ease-out forwards;
-    opacity: 0;
-    transform: translateY(20px);
   }
-  
-  .menu-item:nth-child(1) { animation-delay: 0.1s; }
-  .menu-item:nth-child(2) { animation-delay: 0.2s; }
-  .menu-item:nth-child(3) { animation-delay: 0.3s; }
-  .menu-item:nth-child(4) { animation-delay: 0.4s; }
-  .menu-item:nth-child(5) { animation-delay: 0.5s; }
-  .menu-item:nth-child(6) { animation-delay: 0.6s; }
-  .menu-item:nth-child(7) { animation-delay: 0.7s; }
   
   .menu-item:hover {
     background: #005288;
     color: white;
-    transform: translateY(-2px) scale(1.05);
+    transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0, 82, 136, 0.2);
   }
   
-  header {
-    text-align: center;
-    padding: 30px 0;
-    margin-bottom: 30px;
-    background: rgba(255, 255, 255, 0.85);
+  /* Hero Section */
+  .hero {
+    background: linear-gradient(rgba(0, 82, 136, 0.8), rgba(0, 82, 136, 0.9)), url('https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;
     border-radius: 15px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    position: relative;
-    overflow: hidden;
-    animation: fadeIn 1s ease-out;
+    padding: 40px 30px;
+    text-align: center;
+    margin-bottom: 30px;
+    color: white;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
   }
   
-  header::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 5px;
-    background: linear-gradient(90deg, #005288, #0088cc);
-  }
-  
-  h1 {
-    color: #005288;
+  .hero h2 {
     font-size: 2.5rem;
-    margin-bottom: 10px;
-    animation: pulse 2s infinite;
+    margin-bottom: 20px;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
   }
   
-  .tagline {
-    color: #0088cc;
+  .hero p {
     font-size: 1.2rem;
-    font-weight: 500;
+    max-width: 800px;
+    margin: 0 auto 30px;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+  }
+  
+  .hero-btn {
+    display: inline-block;
+    background: #fff;
+    color: #005288;
+    padding: 12px 30px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .hero-btn:hover {
+    background: #0088cc;
+    color: white;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
   }
   
   .container {
@@ -124,7 +219,6 @@
     flex-wrap: wrap;
     gap: 30px;
     margin-bottom: 30px;
-    animation: fadeIn 1.2s ease-out;
   }
   
   .main-content {
@@ -139,7 +233,6 @@
     border-radius: 15px;
     padding: 25px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    animation: fadeIn 1.4s ease-out;
   }
   
   .section {
@@ -150,17 +243,13 @@
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
     position: relative;
     overflow: hidden;
-    animation: fadeIn 0.8s ease-out;
-    opacity: 0;
-    transform: translateY(30px);
+    transition: all 0.3s ease;
   }
   
-  .section:nth-child(1) { animation-delay: 0.2s; }
-  .section:nth-child(2) { animation-delay: 0.4s; }
-  .section:nth-child(3) { animation-delay: 0.6s; }
-  .section:nth-child(4) { animation-delay: 0.8s; }
-  .section:nth-child(5) { animation-delay: 1.0s; }
-  .section:nth-child(6) { animation-delay: 1.2s; }
+  .section:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  }
   
   .section::before {
     content: "";
@@ -177,6 +266,17 @@
     margin-bottom: 20px;
     padding-bottom: 10px;
     border-bottom: 2px solid #e0e7ff;
+    position: relative;
+  }
+  
+  h2::after {
+    content: "";
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 50px;
+    height: 2px;
+    background: #0088cc;
   }
   
   input, select, textarea, button {
@@ -197,13 +297,13 @@
     cursor: pointer;
     transition: all 0.3s ease;
     font-size: 1rem;
-    animation: pulseButton 2s infinite;
+    box-shadow: 0 4px 8px rgba(0, 82, 136, 0.2);
   }
   
   button:hover {
     background: linear-gradient(135deg, #003d66, #006699);
-    transform: translateY(-2px) scale(1.05);
-    box-shadow: 0 4px 10px rgba(0, 82, 136, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 82, 136, 0.3);
   }
   
   #chatBox {
@@ -221,7 +321,12 @@
     padding: 10px;
     border-radius: 8px;
     max-width: 80%;
-    animation: fadeIn 0.5s ease-out;
+    animation: fadeIn 0.3s ease;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
   }
   
   .doctor-msg {
@@ -257,16 +362,62 @@
   
   .social-icons a {
     display: inline-block;
-    font-size: 2rem;
-    text-decoration: none;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(0, 82, 136, 0.1);
     color: #005288;
-    transition: transform 0.3s ease;
-    animation: bounce 2s infinite;
+    font-size: 1.8rem;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 3px 6px rgba(0, 82, 136, 0.1);
+  }
+  
+  .social-icons a::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, transparent, rgba(255,255,255,0.2), transparent);
+    transform: translateX(-100%);
+    transition: transform 0.5s ease;
+  }
+  
+  .social-icons a:hover::before {
+    transform: translateX(100%);
   }
   
   .social-icons a:hover {
-    transform: translateY(-5px);
-    color: #0088cc;
+    transform: translateY(-5px) scale(1.1);
+    color: white;
+    background: #005288;
+    box-shadow: 0 5px 15px rgba(0, 82, 136, 0.3);
+  }
+  
+  .social-icons a.facebook:hover {
+    background: #3b5998;
+  }
+  
+  .social-icons a.whatsapp:hover {
+    background: #25d366;
+  }
+  
+  .social-icons a.instagram:hover {
+    background: #e1306c;
+  }
+  
+  .social-icons a.linkedin:hover {
+    background: #0077b5;
+  }
+  
+  .social-icons a.twitter:hover {
+    background: #1da1f2;
   }
   
   .feature-card {
@@ -275,23 +426,29 @@
     padding: 20px;
     margin-bottom: 20px;
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
-    transition: transform 0.3s ease;
-    animation: slideInLeft 0.6s ease-out;
-    opacity: 0;
-    transform: translateX(-30px);
+    transition: all 0.3s ease;
+    border: 1px solid rgba(0, 0, 0, 0.05);
   }
-  
-  .feature-card:nth-child(1) { animation-delay: 0.2s; }
-  .feature-card:nth-child(2) { animation-delay: 0.4s; }
-  .feature-card:nth-child(3) { animation-delay: 0.6s; }
   
   .feature-card:hover {
     transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
   }
   
   .feature-card h3 {
     color: #005288;
     margin-bottom: 10px;
+    position: relative;
+  }
+  
+  .feature-card h3::after {
+    content: "";
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 30px;
+    height: 2px;
+    background: #0088cc;
   }
   
   .feature-card p {
@@ -303,13 +460,19 @@
     align-items: center;
     gap: 15px;
     margin-bottom: 15px;
-    animation: slideInRight 0.8s ease-out;
-    opacity: 0;
-    transform: translateX(30px);
+    padding: 15px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.7);
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    border: 1px solid rgba(0, 0, 0, 0.05);
   }
   
-  .doctor-profile:nth-child(1) { animation-delay: 0.3s; }
-  .doctor-profile:nth-child(2) { animation-delay: 0.6s; }
+  .doctor-profile:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 82, 136, 0.1);
+    background: rgba(255, 255, 255, 0.9);
+  }
   
   .doctor-avatar {
     width: 80px;
@@ -317,7 +480,12 @@
     border-radius: 50%;
     border: 3px solid #005288;
     overflow: hidden;
-    animation: fadeIn 0.5s ease-out;
+    transition: all 0.3s ease;
+  }
+  
+  .doctor-avatar:hover {
+    transform: scale(1.1);
+    box-shadow: 0 5px 15px rgba(0, 82, 136, 0.2);
   }
   
   .doctor-avatar img {
@@ -329,6 +497,7 @@
   .doctor-info h3 {
     color: #005288;
     margin-bottom: 5px;
+    font-size: 1.2rem;
   }
   
   .doctor-info p {
@@ -345,7 +514,13 @@
     background: rgba(255, 255, 255, 0.9);
     border-radius: 15px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-    animation: fadeIn 1s ease-out;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+  }
+  
+  .founder-profile:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
   }
   
   .founder-avatar {
@@ -354,7 +529,12 @@
     border-radius: 50%;
     border: 3px solid #005288;
     overflow: hidden;
-    animation: fadeIn 0.5s ease-out;
+    transition: all 0.3s ease;
+  }
+  
+  .founder-avatar:hover {
+    transform: scale(1.1);
+    box-shadow: 0 5px 15px rgba(0, 82, 136, 0.2);
   }
   
   .founder-avatar img {
@@ -380,7 +560,6 @@
     border-radius: 15px;
     margin-top: 30px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    animation: fadeIn 1.2s ease-out;
   }
   
   .contact-info {
@@ -400,78 +579,40 @@
   .contact-item a {
     color: #005288;
     text-decoration: none;
+    transition: all 0.3s ease;
   }
   
   .contact-item a:hover {
+    color: #0088cc;
     text-decoration: underline;
+    transform: translateY(-2px);
   }
   
-  /* Animations */
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-  
-  @keyframes slideInUp {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  @keyframes slideInLeft {
-    from {
-      opacity: 0;
-      transform: translateX(-30px);
-    }
-    to {
-      opacity: 1;
-      transform: translateX(0);
-    }
-  }
-  
-  @keyframes slideInRight {
-    from {
-      opacity: 0;
-      transform: translateX(30px);
-    }
-    to {
-      opacity: 1;
-      transform: translateX(0);
-    }
-  }
-  
-  @keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-    100% { transform: scale(1); }
-  }
-  
-  @keyframes pulseButton {
-    0% { box-shadow: 0 0 0 0 rgba(0, 82, 136, 0.4); }
-    70% { box-shadow: 0 0 0 10px rgba(0, 82, 136, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(0, 82, 136, 0); }
-  }
-  
-  @keyframes bounce {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
-  }
-  
+  /* Responsive Design */
   @media (max-width: 768px) {
     .container {
       flex-direction: column;
     }
     
-    h1 {
+    .header-container {
+      flex-direction: column;
+      gap: 15px;
+    }
+    
+    .header-right {
+      width: 100%;
+      justify-content: center;
+    }
+    
+    .hospital-name h1 {
+      font-size: 1.5rem;
+    }
+    
+    .hero h2 {
       font-size: 2rem;
     }
     
-    .tagline {
+    .hero p {
       font-size: 1rem;
     }
     
@@ -482,10 +623,30 @@
     .menu-item {
       margin: 5px;
     }
+    
+    .hospital-logo {
+      width: 60px;
+      height: 60px;
+      font-size: 24px;
+    }
   }
 </style>
 </head>
 <body>
+  <!-- Header Section -->
+  <div class="header-container">
+    <div class="logo-container">
+      <div class="hospital-logo">H</div>
+      <div class="hospital-name">
+        <h1>MediCare Hospital</h1>
+        <p>Advanced Healthcare Solutions</p>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="time-display" id="currentTime"></div>
+    </div>
+  </div>
+
   <!-- Menu Section -->
   <div class="menu">
     <a href="#home" class="menu-item">Home</a>
@@ -497,10 +658,12 @@
     <a href="#founder" class="menu-item">Founder</a>
   </div>
 
-  <header>
-    <h1>AI Online Doctor Consultation</h1>
-    <p class="tagline">Your health, our priority - 24/7 medical assistance</p>
-  </header>
+  <!-- Hero Section -->
+  <div class="hero">
+    <h2>Expert Medical Care at Your Fingertips</h2>
+    <p>Connect with top doctors, get instant consultations, and access comprehensive health services from the comfort of your home.</p>
+    <a href="#appointments" class="hero-btn">Book Appointment Now</a>
+  </div>
 
   <div class="container">
     <div class="main-content">
@@ -577,17 +740,17 @@
           <h2>AI Doctor Assistant</h2>
           <input type="text" id="aiQuestion" placeholder="Ask the AI any health question..." />
           <button onclick="askAI()">Ask AI</button>
-          <p id="aiAnswer"></p>
+          <div id="aiAnswer"></div>
         </div>
       </div>
     </div>
 
     <div class="sidebar">
       <div class="section">
-        <h2>Features</h2>
+        <h2>Our Services</h2>
         <div class="feature-card">
-          <h3>24/7 Availability</h3>
-          <p>Get medical assistance anytime, anywhere with our round-the-clock service.</p>
+          <h3>24/7 Online Consultations</h3>
+          <p>Get medical advice anytime, anywhere with our round-the-clock service.</p>
         </div>
         <div class="feature-card">
           <h3>AI-Powered Diagnosis</h3>
@@ -612,11 +775,11 @@
           </div>
         </div>
         <div class="social-icons">
-          <a href="https://www.facebook.com/" title="Facebook" target="_blank">🌐</a>
-          <a href="https://wa.me/911234567890" title="WhatsApp" target="_blank">🟢</a>
-          <a href="https://instagram.com/" title="Instagram" target="_blank">📸</a>
-          <a href="https://linkedin.com/" title="LinkedIn" target="_blank">🔗</a>
-          <a href="https://twitter.com/" title="Twitter" target="_blank">🐦</a>
+          <a href="https://www.facebook.com/" title="Facebook" target="_blank" class="facebook">f</a>
+          <a href="https://wa.me/911234567890" title="WhatsApp" target="_blank" class="whatsapp">w</a>
+          <a href="https://instagram.com/" title="Instagram" target="_blank" class="instagram">i</a>
+          <a href="https://linkedin.com/" title="LinkedIn" target="_blank" class="linkedin">in</a>
+          <a href="https://twitter.com/" title="Twitter" target="_blank" class="twitter">t</a>
         </div>
       </div>
     </div>
@@ -630,14 +793,14 @@
       </div>
       <div class="founder-info">
         <h3>Er. Om Kumar</h3>
-        <p>Founder & CEO, AI Online Doctor Consultation.</p>
+        <p>Founder & CEO, MediCare Hospital.</p>
         <p>Er. Om Kumar has dedicated his career to making quality healthcare accessible to everyone through innovative digital solutions.</p>
       </div>
     </div>
   </div>
 
   <footer>
-    <p>&copy; 2025 AI Online Doctor Consultation. All rights reserved.</p>
+    <p>&copy; 2025 MediCare Hospital. All rights reserved.</p>
     <p>Designed with ❤️ for better healthcare access</p>
   </footer>
 
@@ -645,6 +808,20 @@
     let loggedInUser = null;
     let userRole = null;
     const chatBox = document.getElementById('chatBox');
+
+    // Function to update time display
+    function showTime() {
+      const now = new Date();
+      const timeString = now.toLocaleTimeString();
+      const dateString = now.toLocaleDateString();
+      document.getElementById('currentTime').innerHTML = `${timeString} | ${dateString}`;
+    }
+
+    // Initial time display
+    showTime();
+    
+    // Update time every second
+    setInterval(showTime, 1000);
 
     function login() {
       const username = document.getElementById('username').value.trim();
@@ -707,6 +884,9 @@
           let reply = 'Thank you for your message. Please provide more details.';
           if (message.toLowerCase().includes('pain')) reply = 'Please describe the location and intensity of your pain.';
           if (message.toLowerCase().includes('appointment')) reply = 'To book an appointment, please use the booking section above.';
+          if (message.toLowerCase().includes('headache')) reply = 'For headaches, rest in a quiet, dark room, stay hydrated, and consider over-the-counter pain relievers. If severe or frequent, consult a doctor.';
+          if (message.toLowerCase().includes('fever')) reply = 'For fever, rest, stay hydrated, and consider acetaminophen or ibuprofen. Seek medical attention if temperature exceeds 103°F or persists for more than 3 days.';
+          if (message.toLowerCase().includes('cough')) reply = 'For cough, drink warm fluids, use a humidifier, and consider honey for relief. If persistent or severe, consult a doctor.';
           appendMessage('Doctor', reply, 'doctor-msg');
         }, 800);
       } else if (userRole === 'doctor') {
@@ -732,24 +912,247 @@
       result.innerText = advice;
     }
 
-    async function askAI() {
+    function askAI() {
       const q = document.getElementById('aiQuestion').value.trim();
       const ansEl = document.getElementById('aiAnswer');
       if (!q) {
-        ansEl.innerText = "Please enter a question for the AI.";
+        ansEl.innerHTML = "<p style='color:red;'>Please enter a question for the AI.</p>";
         return;
       }
-      ansEl.innerText = "Thinking...";
+      
+      // Show loading indicator
+      ansEl.innerHTML = "<p style='color:#005288; font-style: italic;'>AI Doctor is analyzing your question...</p>";
+      
+      // Simulate AI processing time
       setTimeout(() => {
-        if(q.toLowerCase().includes("covid")) {
-          ansEl.innerText = "AI Doctor: COVID-19 symptoms include fever, cough, and difficulty breathing. Contact a specialist if you have concerns.";
-        } else if(q.toLowerCase().includes("diet")) {
-          ansEl.innerText = "AI Doctor: A balanced diet, rich in fruits/veggies and hydration, is best for health.";
-        } else {
-          ansEl.innerText = "AI Doctor: Thank you for your question. Please contact a medical professional for personal advice.";
+        let answer = "";
+        const question = q.toLowerCase();
+        
+        // Comprehensive AI responses with prevention and medicine information
+        if (question.includes("headache")) {
+          answer = `
+            <div style="background:#e3f2fd; padding:15px; border-radius:8px; border-left:4px solid #005288;">
+              <h3 style="color:#005288;">Headache Analysis</h3>
+              <p><strong>Prevention:</strong></p>
+              <ul>
+                <li>Maintain regular sleep schedule (7-8 hours)</li>
+                <li>Stay hydrated throughout the day</li>
+                <li>Manage stress through relaxation techniques</li>
+                <li>Avoid known triggers (certain foods, bright lights)</li>
+                <li>Take regular breaks from screen time</li>
+              </ul>
+              <p><strong>Medications:</strong></p>
+              <ul>
+                <li>Over-the-counter: Acetaminophen (Tylenol), Ibuprofen (Advil)</li>
+                <li>Prescription: For chronic migraines - Triptans, Preventive medications</li>
+              </ul>
+              <p><strong>General Advice:</strong> Rest in a quiet, dark room, stay hydrated, and consider over-the-counter pain relievers. If headaches are severe or frequent, consult a doctor.</p>
+            </div>
+          `;
+        } 
+        else if (question.includes("fever")) {
+          answer = `
+            <div style="background:#e3f2fd; padding:15px; border-radius:8px; border-left:4px solid #005288;">
+              <h3 style="color:#005288;">Fever Analysis</h3>
+              <p><strong>Prevention:</strong></p>
+              <ul>
+                <li>Practice good hygiene (handwashing)</li>
+                <li>Get recommended vaccinations</li>
+                <li>Avoid close contact with sick individuals</li>
+                <li>Maintain a healthy immune system with proper nutrition</li>
+              </ul>
+              <p><strong>Medications:</strong></p>
+              <ul>
+                <li>Acetaminophen (Tylenol) - Reduces fever and pain</li>
+                <li>Ibuprofen (Advil) - Reduces fever and inflammation</li>
+                <li>Aspirin - For adults (avoid in children)</li>
+              </ul>
+              <p><strong>When to seek medical attention:</strong></p>
+              <ul>
+                <li>Temperature above 103°F (39.4°C)</li>
+                <li>Fever lasting more than 3 days</li>
+                <li>Severe headache, stiff neck, or difficulty breathing</li>
+                <li>Severe vomiting or inability to keep fluids down</li>
+              </ul>
+              <p><strong>General Care:</strong> Rest, stay hydrated, and consider acetaminophen or ibuprofen as directed on the package.</p>
+            </div>
+          `;
         }
-      }, 1300);
+        else if (question.includes("covid") || question.includes("coronavirus")) {
+          answer = `
+            <div style="background:#e3f2fd; padding:15px; border-radius:8px; border-left:4px solid #005288;">
+              <h3 style="color:#005288;">COVID-19 Information</h3>
+              <p><strong>Prevention:</strong></p>
+              <ul>
+                <li>Get vaccinated and receive booster doses as recommended</li>
+                <li>Wear masks in crowded or poorly ventilated areas</li>
+                <li>Practice social distancing</li>
+                <li>Wash hands frequently with soap and water</li>
+                <li>Use hand sanitizer with at least 60% alcohol</li>
+              </ul>
+              <p><strong>Medications:</strong></p>
+              <ul>
+                <li>Antiviral drugs: Paxlovid, Remdesivir (for high-risk patients)</li>
+                <li>Monoclonal antibodies (for early treatment)</li>
+                <li>Over-the-counter: Acetaminophen, Ibuprofen for symptoms</li>
+              </ul>
+              <p><strong>Important:</strong> If you experience emergency warning signs such as difficulty breathing, persistent pain or pressure in the chest, or bluish lips or face, seek medical attention immediately.</p>
+              <p>Follow local health guidelines for testing and vaccination.</p>
+            </div>
+          `;
+        }
+        else if (question.includes("diet") || question.includes("nutrition")) {
+          answer = `
+            <div style="background:#e3f2fd; padding:15px; border-radius:8px; border-left:4px solid #005288;">
+              <h3 style="color:#005288;">Nutrition Advice</h3>
+              <p><strong>Prevention:</strong></p>
+              <ul>
+                <li>Maintain a balanced diet rich in fruits and vegetables</li>
+                <li>Limit processed foods and sugary drinks</li>
+                <li>Control portion sizes to maintain healthy weight</li>
+                <li>Stay hydrated with water</li>
+                <li>Include fiber-rich foods for digestive health</li>
+              </ul>
+              <p><strong>Medications:</strong></p>
+              <ul>
+                <li>Vitamin D supplements (if deficient)</li>
+                <li>Omega-3 fatty acids (fish oil)</li>
+                <li>Iron supplements (if anemic)</li>
+                <li>Probiotics for gut health</li>
+              </ul>
+              <p><strong>General Tips:</strong></p>
+              <ul>
+                <li>Eat a variety of colorful fruits and vegetables</li>
+                <li>Include lean proteins (fish, poultry, legumes)</li>
+                <li>Choose whole grains over refined grains</li>
+                <li>Limit sodium intake</li>
+                <li>Include healthy fats (avocados, nuts, olive oil)</li>
+              </ul>
+            </div>
+          `;
+        }
+        else if (question.includes("exercise") || question.includes("workout")) {
+          answer = `
+            <div style="background:#e3f2fd; padding:15px; border-radius:8px; border-left:4px solid #005288;">
+              <h3 style="color:#005288;">Exercise Recommendations</h3>
+              <p><strong>Prevention:</strong></p>
+              <ul>
+                <li>Regular physical activity reduces risk of chronic diseases</li>
+                <li>Helps maintain healthy weight</li>
+                <li>Improves cardiovascular health</li>
+                <li>Boosts mental health and reduces stress</li>
+              </ul>
+              <p><strong>Medications:</strong></p>
+              <ul>
+                <li>Supplements: Vitamin D, Magnesium (for muscle function)</li>
+                <li>Anti-inflammatory medications (for joint pain)</li>
+                <li>Prescription medications for specific conditions (as needed)</li>
+              </ul>
+              <p><strong>Exercise Guidelines:</strong></p>
+              <ul>
+                <li>Cardiovascular exercise: 150 minutes of moderate activity per week</li>
+                <li>Muscle-strengthening activities: At least 2 days per week</li>
+                <li>Flexibility and balance: Activities like yoga or tai chi</li>
+              </ul>
+              <p><strong>Beginner Tips:</strong></p>
+              <ul>
+                <li>Start slowly and gradually increase intensity</li>
+                <li>Choose activities you enjoy</li>
+                <li>Listen to your body and rest when needed</li>
+                <li>Stay hydrated before, during, and after exercise</li>
+              </ul>
+              <p>Consult a healthcare provider before starting a new exercise program if you have health conditions.</p>
+            </div>
+          `;
+        }
+        else if (question.includes("stress") || question.includes("anxiety")) {
+          answer = `
+            <div style="background:#e3f2fd; padding:15px; border-radius:8px; border-left:4px solid #005288;">
+              <h3 style="color:#005288;">Stress and Anxiety Management</h3>
+              <p><strong>Prevention:</strong></p>
+              <ul>
+                <li>Practice stress management techniques</li>
+                <li>Maintain work-life balance</li>
+                <li>Regular physical activity</li>
+                <li>Healthy sleep habits (7-9 hours)</li>
+                <li>Social support from family and friends</li>
+              </ul>
+              <p><strong>Medications:</strong></p>
+              <ul>
+                <li>Antidepressants: SSRIs, SNRIs (for chronic conditions)</li>
+                <li>Anxiolytics: Benzodiazepines (short-term use)</li>
+                <li>Herbal supplements: Valerian root, Passionflower</li>
+                <li>Stress management medications (as prescribed)</li>
+              </ul>
+              <p><strong>Management Strategies:</strong></p>
+              <ul>
+                <li>Relaxation techniques: Deep breathing, meditation, progressive muscle relaxation</li>
+                <li>Regular exercise</li>
+                <li>Healthy sleep habits</li>
+                <li>Social support</li>
+                <li>Time management</li>
+              </ul>
+              <p><strong>When to seek help:</strong> If stress significantly impacts your daily life, consider speaking with a mental health professional.</p>
+            </div>
+          `;
+        }
+        else if (question.includes("diabetes")) {
+          answer = `
+            <div style="background:#e3f2fd; padding:15px; border-radius:8px; border-left:4px solid #005288;">
+              <h3 style="color:#005288;">Diabetes Management</h3>
+              <p><strong>Prevention:</strong></p>
+              <ul>
+                <li>Maintain healthy weight</li>
+                <li>Regular physical activity</li>
+                <li>Healthy diet low in sugar and refined carbs</li>
+                <li>Regular check-ups for blood sugar levels</li>
+              </ul>
+              <p><strong>Medications:</strong></p>
+              <ul>
+                <li>Insulin (various types)</li>
+                <li>Metformin (for Type 2 diabetes)</li>
+                <li>Sulfonylureas</li>
+                <li>GLP-1 receptor agonists</li>
+                <li>Thiazide diuretics (for hypertension)</li>
+              </ul>
+              <p><strong>Management Tips:</strong></p>
+              <ul>
+                <li>Monitor blood glucose regularly</li>
+                <li>Follow prescribed diet plan</li>
+                <li>Take medications as directed</li>
+                <li>Regular exercise</li>
+                <li>Foot care and regular check-ups</li>
+              </ul>
+            </div>
+          `;
+        }
+        else {
+          // Default response for other questions
+          answer = `
+            <div style="background:#e3f2fd; padding:15px; border-radius:8px; border-left:4px solid #005288;">
+              <h3 style="color:#005288;">AI Doctor Response</h3>
+              <p>Thank you for your question. While I can provide general health information, this is not a substitute for professional medical advice.</p>
+              <p>For accurate diagnosis and treatment, please consult with a qualified healthcare provider. If you're experiencing severe symptoms or emergency conditions, seek immediate medical attention.</p>
+              <p><strong>General Health Tip:</strong> Maintain a balanced diet, stay physically active, get adequate sleep, and manage stress for optimal health.</p>
+            </div>
+          `;
+        }
+        
+        ansEl.innerHTML = answer;
+      }, 1500);
     }
   </script>
 </body>
 </html>
+    
+    
+
+    
+  
+  
+  
+    
+
+    
+  
+ 
