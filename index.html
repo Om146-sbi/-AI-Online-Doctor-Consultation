@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>AI Online Doctor Consultation</title>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    max-width: 1200px;
+    margin: auto;
+    padding: 20px;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+    color: #333;
+    position: relative;
+    line-height: 1.6;
+  }
+  
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: url('https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=cover&w=1200&q=80') center/cover no-repeat;
+    opacity: 0.1;
+    z-index: -1;
+  }
+  
+  /* Menu Styles */
+  .menu {
+    display: flex;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 15px;
+    padding: 15px;
+    margin-bottom: 30px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+    animation: fadeIn 0.8s ease-out;
+  }
+  
+  .menu::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background: linear-gradient(90deg, #005288, #0088cc);
+  }
+  
+  .menu-item {
+    margin: 0 15px;
+    padding: 10px 20px;
+    text-decoration: none;
+    color: #005288;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    animation: slideInUp 0.5s ease-out forwards;
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  
+  .menu-item:nth-child(1) { animation-delay: 0.1s; }
+  .menu-item:nth-child(2) { animation-delay: 0.2s; }
+  .menu-item:nth-child(3) { animation-delay: 0.3s; }
+  .menu-item:nth-child(4) { animation-delay: 0.4s; }
+  .menu-item:nth-child(5) { animation-delay: 0.5s; }
+  .menu-item:nth-child(6) { animation-delay: 0.6s; }
+  .menu-item:nth-child(7) { animation-delay: 0.7s; }
+  
+  .menu-item:hover {
+    background: #005288;
+    color: white;
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 82, 136, 0.2);
+  }
+  
+  header {
+    text-align: center;
+    padding: 30px 0;
+    margin-bottom: 30px;
+    background: rgba(255, 255, 255, 0.85);
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+    animation: fadeIn 1s ease-out;
+  }
+  
+  header::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background: linear-gradient(90deg, #005288, #0088cc);
+  }
+  
+  h1 {
+    color: #005288;
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    animation: pulse 2s infinite;
+  }
+  
+  .tagline {
+    color: #0088cc;
+    font-size: 1.2rem;
+    font-weight: 500;
+  }
+  
+  .container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    margin-bottom: 30px;
+    animation: fadeIn 1.2s ease-out;
+  }
+  
+  .main-content {
+    flex: 3;
+    min-width: 300px;
+  }
+  
+  .sidebar {
+    flex: 1;
+    min-width: 250px;
+    background: rgba(255, 255, 255, 0.85);
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 1.4s ease-out;
+  }
+  
+  .section {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 15px;
+    padding: 25px;
+    margin-bottom: 30px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    position: relative;
+    overflow: hidden;
+    animation: fadeIn 0.8s ease-out;
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  
+  .section:nth-child(1) { animation-delay: 0.2s; }
+  .section:nth-child(2) { animation-delay: 0.4s; }
+  .section:nth-child(3) { animation-delay: 0.6s; }
+  .section:nth-child(4) { animation-delay: 0.8s; }
+  .section:nth-child(5) { animation-delay: 1.0s; }
+  .section:nth-child(6) { animation-delay: 1.2s; }
+  
+  .section::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 5px;
+    height: 100%;
+    background: linear-gradient(to bottom, #005288, #0088cc);
+  }
+  
+  h2 {
+    color: #005288;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e0e7ff;
+  }
+  
+  input, select, textarea, button {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    box-sizing: border-box;
+    font-family: inherit;
+  }
+  
+  button {
+    background: linear-gradient(135deg, #005288, #0088cc);
+    color: white;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+    animation: pulseButton 2s infinite;
+  }
+  
+  button:hover {
+    background: linear-gradient(135deg, #003d66, #006699);
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 4px 10px rgba(0, 82, 136, 0.3);
+  }
+  
+  #chatBox {
+    height: 200px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    padding: 15px;
+    background: #f8f9ff;
+    margin-bottom: 15px;
+    border-radius: 8px;
+  }
+  
+  .chat-message {
+    margin-bottom: 15px;
+    padding: 10px;
+    border-radius: 8px;
+    max-width: 80%;
+    animation: fadeIn 0.5s ease-out;
+  }
+  
+  .doctor-msg {
+    background: #e3f2fd;
+    border-left: 4px solid #005288;
+    margin-left: auto;
+  }
+  
+  .user-msg {
+    background: #e8f5e9;
+    border-left: 4px solid #4caf50;
+  }
+  
+  #loginSection {
+    margin-bottom: 20px;
+  }
+  
+  #apptMsg, #symptomResult, #aiAnswer {
+    background: #eef6ff;
+    padding: 15px;
+    border-radius: 8px;
+    min-height: 40px;
+    margin-top: 10px;
+    border-left: 4px solid #005288;
+  }
+  
+  .social-icons {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+  }
+  
+  .social-icons a {
+    display: inline-block;
+    font-size: 2rem;
+    text-decoration: none;
+    color: #005288;
+    transition: transform 0.3s ease;
+    animation: bounce 2s infinite;
+  }
+  
+  .social-icons a:hover {
+    transform: translateY(-5px);
+    color: #0088cc;
+  }
+  
+  .feature-card {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease;
+    animation: slideInLeft 0.6s ease-out;
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  
+  .feature-card:nth-child(1) { animation-delay: 0.2s; }
+  .feature-card:nth-child(2) { animation-delay: 0.4s; }
+  .feature-card:nth-child(3) { animation-delay: 0.6s; }
+  
+  .feature-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .feature-card h3 {
+    color: #005288;
+    margin-bottom: 10px;
+  }
+  
+  .feature-card p {
+    color: #666;
+  }
+  
+  .doctor-profile {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 15px;
+    animation: slideInRight 0.8s ease-out;
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  
+  .doctor-profile:nth-child(1) { animation-delay: 0.3s; }
+  .doctor-profile:nth-child(2) { animation-delay: 0.6s; }
+  
+  .doctor-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 3px solid #005288;
+    overflow: hidden;
+    animation: fadeIn 0.5s ease-out;
+  }
+  
+  .doctor-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .doctor-info h3 {
+    color: #005288;
+    margin-bottom: 5px;
+  }
+  
+  .doctor-info p {
+    color: #666;
+    font-size: 0.9rem;
+  }
+  
+  .founder-profile {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-top: 20px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    animation: fadeIn 1s ease-out;
+  }
+  
+  .founder-avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 3px solid #005288;
+    overflow: hidden;
+    animation: fadeIn 0.5s ease-out;
+  }
+  
+  .founder-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .founder-info h3 {
+    color: #005288;
+    margin-bottom: 5px;
+  }
+  
+  .founder-info p {
+    color: #666;
+    font-size: 1rem;
+  }
+  
+  footer {
+    text-align: center;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.85);
+    border-radius: 15px;
+    margin-top: 30px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 1.2s ease-out;
+  }
+  
+  .contact-info {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+    margin: 20px 0;
+  }
+  
+  .contact-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .contact-item a {
+    color: #005288;
+    text-decoration: none;
+  }
+  
+  .contact-item a:hover {
+    text-decoration: underline;
+  }
+  
+  /* Animations */
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  @keyframes slideInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes slideInLeft {
+    from {
+      opacity: 0;
+      transform: translateX(-30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+  
+  @keyframes slideInRight {
+    from {
+      opacity: 0;
+      transform: translateX(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+  
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+  }
+  
+  @keyframes pulseButton {
+    0% { box-shadow: 0 0 0 0 rgba(0, 82, 136, 0.4); }
+    70% { box-shadow: 0 0 0 10px rgba(0, 82, 136, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(0, 82, 136, 0); }
+  }
+  
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+  
+  @media (max-width: 768px) {
+    .container {
+      flex-direction: column;
+    }
+    
+    h1 {
+      font-size: 2rem;
+    }
+    
+    .tagline {
+      font-size: 1rem;
+    }
+    
+    .menu {
+      flex-wrap: wrap;
+    }
+    
+    .menu-item {
+      margin: 5px;
+    }
+  }
+</style>
+</head>
+<body>
+  <!-- Menu Section -->
+  <div class="menu">
+    <a href="#home" class="menu-item">Home</a>
+    <a href="#doctors" class="menu-item">Doctors</a>
+    <a href="#appointments" class="menu-item">Appointments</a>
+    <a href="#chat" class="menu-item">Chat</a>
+    <a href="#symptoms" class="menu-item">Symptom Checker</a>
+    <a href="#ai" class="menu-item">AI Assistant</a>
+    <a href="#founder" class="menu-item">Founder</a>
+  </div>
+
+  <header>
+    <h1>AI Online Doctor Consultation</h1>
+    <p class="tagline">Your health, our priority - 24/7 medical assistance</p>
+  </header>
+
+  <div class="container">
+    <div class="main-content">
+      <div id="loginSection" class="section">
+        <h2>Login</h2>
+        <input type="text" id="username" placeholder="Enter your name" />
+        <select id="role">
+          <option value="">Select role</option>
+          <option value="patient">Patient</option>
+          <option value="doctor">Doctor</option>
+        </select>
+        <button onclick="login()">Login</button>
+        <p id="loginMsg" style="color:red; margin-top: 10px;"></p>
+      </div>
+
+      <div id="mainContent" style="display:none;">
+        <div class="section">
+          <h2>Welcome, <span id="userDisplay"></span></h2>
+        </div>
+
+        <div class="section" id="doctors">
+          <h2>Doctors Available</h2>
+          <div class="doctor-profile">
+            <div class="doctor-avatar">
+              <img src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&w=200&q=80" alt="Dr. Priya Sharma">
+            </div>
+            <div class="doctor-info">
+              <h3>Dr. Priya Sharma</h3>
+              <p>General Physician (Mon-Fri, 10AM-4PM)</p>
+            </div>
+          </div>
+          <div class="doctor-profile">
+            <div class="doctor-avatar">
+              <img src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&w=200&q=80" alt="Dr. Anjali Patel">
+            </div>
+            <div class="doctor-info">
+              <h3>Dr. Rahul Verma</h3>
+              <p>Cardiology (Mon-Fri, 9AM-2PM)</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="section" id="appointments" style="display:none;">
+          <h2>Book Appointment</h2>
+          <form id="appointForm">
+            <input type="text" id="apptName" placeholder="Your name" required />
+            <select id="apptDoctor" required>
+              <option value="">Select Doctor</option>
+              <option>Dr. Priya Sharma</option>
+              <option>Dr. Rajesh Verma</option>
+              <option>Dr. Anjali Patel</option>
+            </select>
+            <input type="date" id="apptDate" required />
+            <button type="submit">Book Appointment</button>
+          </form>
+          <p id="apptMsg"></p>
+        </div>
+
+        <div class="section" id="chat" style="display:none;">
+          <h2>Chat with Doctor</h2>
+          <div id="chatBox"></div>
+          <input type="text" id="chatInput" placeholder="Type message..." />
+          <button onclick="sendMessage()">Send</button>
+        </div>
+
+        <div class="section" id="symptoms">
+          <h2>AI Symptom Checker</h2>
+          <textarea id="symptomInput" placeholder="Describe your symptoms..."></textarea>
+          <button onclick="checkSymptoms()">Check Symptoms</button>
+          <p id="symptomResult"></p>
+        </div>
+
+        <div class="section" id="ai">
+          <h2>AI Doctor Assistant</h2>
+          <input type="text" id="aiQuestion" placeholder="Ask the AI any health question..." />
+          <button onclick="askAI()">Ask AI</button>
+          <p id="aiAnswer"></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="sidebar">
+      <div class="section">
+        <h2>Features</h2>
+        <div class="feature-card">
+          <h3>24/7 Availability</h3>
+          <p>Get medical assistance anytime, anywhere with our round-the-clock service.</p>
+        </div>
+        <div class="feature-card">
+          <h3>AI-Powered Diagnosis</h3>
+          <p>Advanced AI technology helps in preliminary diagnosis and health assessment.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Secure Consultations</h3>
+          <p>All communications are encrypted and private for your peace of mind.</p>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2>Contact Information</h2>
+        <div class="contact-info">
+          <div class="contact-item">
+            <span>📧</span>
+            <a href="mailto:omjee7777@gmail.com">omjee7777@gmail.com</a>
+          </div>
+          <div class="contact-item">
+            <span>📞</span>
+            <a href="tel:+916207131572">+91 916207131572</a>
+          </div>
+        </div>
+        <div class="social-icons">
+          <a href="https://www.facebook.com/" title="Facebook" target="_blank">🌐</a>
+          <a href="https://wa.me/911234567890" title="WhatsApp" target="_blank">🟢</a>
+          <a href="https://instagram.com/" title="Instagram" target="_blank">📸</a>
+          <a href="https://linkedin.com/" title="LinkedIn" target="_blank">🔗</a>
+          <a href="https://twitter.com/" title="Twitter" target="_blank">🐦</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" id="founder">
+    <h2>Founder Profile</h2>
+    <div class="founder-profile">
+      <div class="founder-avatar">
+        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80" alt="Er. Om Kumar">
+      </div>
+      <div class="founder-info">
+        <h3>Er. Om Kumar</h3>
+        <p>Founder & CEO, AI Online Doctor Consultation.</p>
+        <p>Er. Om Kumar has dedicated his career to making quality healthcare accessible to everyone through innovative digital solutions.</p>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 AI Online Doctor Consultation. All rights reserved.</p>
+    <p>Designed with ❤️ for better healthcare access</p>
+  </footer>
+
+  <script>
+    let loggedInUser = null;
+    let userRole = null;
+    const chatBox = document.getElementById('chatBox');
+
+    function login() {
+      const username = document.getElementById('username').value.trim();
+      const role = document.getElementById('role').value;
+      const loginMsg = document.getElementById('loginMsg');
+      if (!username || !role) {
+        loginMsg.innerText = 'Please enter your name and select a role.';
+        return;
+      }
+      loggedInUser = username;
+      userRole = role;
+      loginMsg.innerText = '';
+      document.getElementById('loginSection').style.display = 'none';
+      document.getElementById('mainContent').style.display = 'block';
+      document.getElementById('userDisplay').innerText = `${loggedInUser} (${userRole})`;
+
+      if (userRole === 'patient') {
+        document.getElementById('appointments').style.display = 'block';
+        document.getElementById('chat').style.display = 'block';
+      } else if (userRole === 'doctor') {
+        document.getElementById('appointments').style.display = 'none';
+        document.getElementById('chat').style.display = 'block';
+      }
+    }
+
+    document.getElementById('appointForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      if (userRole !== 'patient') {
+        alert('Only patients can book appointments.');
+        return;
+      }
+      const name = document.getElementById('apptName').value.trim();
+      const doctor = document.getElementById('apptDoctor').value;
+      const date = document.getElementById('apptDate').value;
+      if (!name || !doctor || !date) {
+        alert('Please fill all appointment fields.');
+        return;
+      }
+      document.getElementById('apptMsg').innerText = `Appointment booked for ${name} with ${doctor} on ${date}.`;
+      this.reset();
+    });
+
+    function appendMessage(sender, msg, className) {
+      const div = document.createElement('div');
+      div.className = `chat-message ${className}`;
+      div.innerText = `${sender}: ${msg}`;
+      chatBox.appendChild(div);
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    function sendMessage() {
+      const input = document.getElementById('chatInput');
+      const message = input.value.trim();
+      if (!message) return;
+      appendMessage('You', message, 'user-msg');
+      input.value = '';
+
+      if (userRole === 'patient') {
+        setTimeout(() => {
+          let reply = 'Thank you for your message. Please provide more details.';
+          if (message.toLowerCase().includes('pain')) reply = 'Please describe the location and intensity of your pain.';
+          if (message.toLowerCase().includes('appointment')) reply = 'To book an appointment, please use the booking section above.';
+          appendMessage('Doctor', reply, 'doctor-msg');
+        }, 800);
+      } else if (userRole === 'doctor') {
+        setTimeout(() => {
+          appendMessage('Patient', "Thanks Doctor, I will follow your advice.", 'user-msg');
+        }, 800);
+      }
+    }
+
+    function checkSymptoms() {
+      const symptoms = document.getElementById('symptomInput').value.toLowerCase();
+      const result = document.getElementById('symptomResult');
+      let advice = "Please consult a doctor for an accurate diagnosis.";
+      if (symptoms.includes('fever') && symptoms.includes('cough')) {
+        advice = "You may have a respiratory infection. Seek medical help as soon as possible.";
+      } else if (symptoms.includes('headache')) {
+        advice = "Stay hydrated and rest. If persistent, consult a neurologist.";
+      } else if (symptoms.includes('skin') || symptoms.includes('rash')) {
+        advice = "You might want to consult a dermatologist for a precise diagnosis.";
+      } else if (symptoms.length < 10) {
+        advice = "Please enter more details about your symptoms.";
+      }
+      result.innerText = advice;
+    }
+
+    async function askAI() {
+      const q = document.getElementById('aiQuestion').value.trim();
+      const ansEl = document.getElementById('aiAnswer');
+      if (!q) {
+        ansEl.innerText = "Please enter a question for the AI.";
+        return;
+      }
+      ansEl.innerText = "Thinking...";
+      setTimeout(() => {
+        if(q.toLowerCase().includes("covid")) {
+          ansEl.innerText = "AI Doctor: COVID-19 symptoms include fever, cough, and difficulty breathing. Contact a specialist if you have concerns.";
+        } else if(q.toLowerCase().includes("diet")) {
+          ansEl.innerText = "AI Doctor: A balanced diet, rich in fruits/veggies and hydration, is best for health.";
+        } else {
+          ansEl.innerText = "AI Doctor: Thank you for your question. Please contact a medical professional for personal advice.";
+        }
+      }, 1300);
+    }
+  </script>
+</body>
+</html>
